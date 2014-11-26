@@ -3,6 +3,7 @@ Fix the following:
 ml36806:example rbastic$ curl -v -X PUT http://localhost:8081/webdav/images/hotel/foobar/test.txt --data-ascii "ohnoeszzt"
 
 2014/11/27 00:29:12 DAV: error with create path images/hotel/foobar/test.txt error open www/images/hotel/foobar/test.txt: no such file or directory
+(Mimic nginx's implementation?)
 
 ...
 
