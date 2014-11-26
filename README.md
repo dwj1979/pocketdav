@@ -1,5 +1,7 @@
 PocketDAV
 
+Based on rbastic/webdav, a fork of gogits/webdav, for core WebDAV implementation.
+Uses facebookgo/grace for graceful in-place restarts without interrupting user experience.
 
 Quick start:
 
