@@ -1,49 +1,42 @@
 package main
 
 import (
-	"fmt"
+	"flag"
 	"log"
 	"net/http"
-	"os"
-    "flag"
 
-	"github.com/rbastic/webdav"
 	"github.com/facebookgo/grace/gracehttp"
+	"github.com/rbastic/webdav"
 )
 
 var (
-	path = "./tmp"
-    port = flag.String("httpport", "8080", "port to listen on")
+	port = flag.String("httpport", "8080", "port to listen on")
+	dir  = flag.String("docroot", "www", "document root folder to serve from")
 )
 
-func newHandler(name string) http.Handler {
+func newHandler() http.Handler {
 
 	mux := http.NewServeMux()
 	mux.Handle("/", &webdav.Server{
-		Fs:         webdav.Dir(path),
-		Listings:   true,
+		Fs:       webdav.Dir(*dir),
+		Listings: true,
 	})
 
-    return mux;
+	return mux
 }
 
 func main() {
-	os.Mkdir(path, 0755)
+	// TODO: Make sure we can read, write, etc., to *dir
 
-    flag.Parse()
+	flag.Parse()
 
 	// http.StripPrefix is not working, webdav.Server has no knowledge
 	// of stripped component, but needs for COPY/MOVE methods.
 	// Destination path is supplied as header and needs to be stripped.
 
 	gracehttp.Serve(
-		&http.Server{Addr: ":"+*port, Handler: newHandler("Zero  ")},
-    )
+		&http.Server{Addr: ":" + *port, Handler: newHandler()},
+	)
 
-	log.Println("Listening on http://127.0.0.1:"+*port)
-}
-
-// TODO: do something else with this
-func index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, %q\n", r.URL.Path)
+	log.Println("Listening on http://127.0.0.1:" + *port)
 }
