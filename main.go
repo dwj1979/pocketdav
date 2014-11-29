@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"log"
 	"net/http"
 
 	"github.com/facebookgo/grace/gracehttp"
@@ -14,18 +13,6 @@ var (
 	dir  = flag.String("docroot", "www", "document root folder to serve from")
 )
 
-func newHandler() http.Handler {
-
-	mux := http.NewServeMux()
-	mux.Handle("/webdav/", &webdav.Server{
-		Fs:         webdav.Dir(*dir),
-		TrimPrefix: "/webdav/",
-		Listings:   true,
-	})
-
-	return mux
-}
-
 func main() {
 	// TODO: Make sure we can read, write, etc., to *dir
 
@@ -35,7 +22,15 @@ func main() {
 	// of stripped component, but needs for COPY/MOVE methods.
 	// Destination path is supplied as header and needs to be stripped.
 
+	mux := http.NewServeMux()
+	mux.Handle("/webdav/", &webdav.Server{
+		Fs:         webdav.Dir(*dir),
+		TrimPrefix: "/webdav/",
+		Listings:   true,
+	})
+
 	gracehttp.Serve(
-		&http.Server{Addr: ":" + *port, Handler: newHandler()},
+		&http.Server{Addr: ":" + *port, Handler: mux},
 	)
+
 }
