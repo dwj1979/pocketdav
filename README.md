@@ -16,12 +16,15 @@ go build
 
 cURL examples:
 
+```
 $ curl -v -X PUT http://localhost:8081/webdav/test.txt --data-ascii "ohnoeszzt"
 
 $ curl -v -X GET http://localhost:8081/webdav/test.txt
+```
 
 --
 
+```
 ml36806:pocketdav rbastic$ ./pocketdav -h
 Usage of ./pocketdav:
   -alsologtostderr=false: log to standard error as well as files
@@ -34,4 +37,4 @@ Usage of ./pocketdav:
   -stderrthreshold=0: logs at or above this threshold go to stderr
   -v=0: log level for V logs
   -vmodule=: comma-separated list of pattern=N settings for file-filtered logging
-
+```
