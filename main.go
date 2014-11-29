@@ -33,4 +33,5 @@ func main() {
 		&http.Server{Addr: ":" + *port, Handler: mux},
 	)
 
+	webdav.FlushGlog()
 }
