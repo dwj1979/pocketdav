@@ -1,0 +1,4 @@
+- Split off the example from rbastic/webdav
+- Added lots of logging everywhere
+- Added glog
+- Added grace
