@@ -38,6 +38,4 @@ func main() {
 	gracehttp.Serve(
 		&http.Server{Addr: ":" + *port, Handler: newHandler()},
 	)
-
-	log.Println("Listening on http://127.0.0.1:" + *port)
 }
