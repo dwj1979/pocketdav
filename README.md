@@ -10,9 +10,11 @@ facebookgo/grace -- lucky us, we've now got WebDAV.
 
 Quick start:
 
+```
 go build
 ... install all the dependencies, sorry
 ./pocketdav
+```
 
 cURL examples:
 
