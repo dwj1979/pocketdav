@@ -1,0 +1,19 @@
+{
+	"ImportPath": "github.com/rbastic/pocketdav",
+	"GoVersion": "go1.3.3",
+	"Deps": [
+		{
+			"ImportPath": "github.com/facebookgo/grace",
+			"Rev": "5369e5af9da8df86ab8ed51b55d0b2b7ea32c4ec"
+		},
+		{
+			"ImportPath": "github.com/qiniu/log",
+			"Comment": "v1.0.00-2-ge002bc2",
+			"Rev": "e002bc2020b19bfa61ed378cc5407383dbd2f346"
+		},
+		{
+			"ImportPath": "github.com/rbastic/webdav",
+			"Rev": "0bde9e1eb644b5b3c1ddb555ae691695f2d1d964"
+		}
+	]
+}
