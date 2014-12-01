@@ -6,3 +6,6 @@ ml36806:example rbastic$ curl -v -X PUT http://localhost:8081/webdav/images/hote
 (Mimic nginx's implementation?)
 
 ...
+
+Pass litmus tests
+Fix all golint
