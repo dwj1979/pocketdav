@@ -1,12 +1,11 @@
 PocketDAV
 
-Based on rbastic/webdav, a fork of gogits/webdav, for core WebDAV
-implementation.  Uses facebookgo/grace for graceful in-place restarts without
-interrupting user experience, and github.com/golang/glog for leveled execution
-logs.
+A poor man's WebDAV server written in Go.
 
-This was initially intended to be a practice ground for integrating
-facebookgo/grace -- lucky us, we've now got WebDAV.
+This was initially intended to be a small practice ground for integrating
+facebookgo/grace -- I've since added glog and cleaned up a few 'golint'
+complaints in the original webdav server at https://github.com/rbastic/webdav
+and am hoping to get everything merged upstream.
 
 Quick start:
 
