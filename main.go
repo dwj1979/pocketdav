@@ -25,7 +25,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.Handle("/webdav/", &webdav.Server{
 		Fs:         webdav.Dir(*dir),
-		TrimPrefix: "/webdav/",
+		TrimPrefix: "/",
 		Listings:   true,
 	})
 
