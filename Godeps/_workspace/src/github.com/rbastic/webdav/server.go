@@ -73,11 +73,13 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 // convert request url to path
 func (s *Server) url2path(u *url.URL) string {
+	glog.Infoln("u.Path=", u.Path)
 	if u.Path == "" {
 		return "/"
 	}
 
 	if p := strings.TrimPrefix(u.Path, s.TrimPrefix); len(p) < len(u.Path) {
+		glog.Infoln("strings.Trim,", p, " = ", strings.Trim(p, "/"))
 		return strings.Trim(p, "/")
 	}
 
@@ -116,11 +118,13 @@ func (s *Server) pathIsDirectory(path string) bool {
 
 // http://www.webdav.org/specs/rfc4918.html#rfc.section.9.4
 func (s *Server) doGet(w http.ResponseWriter, r *http.Request) {
+	glog.Infoln("DAV", "GET", r.RequestURI)
 	s.serveResource(w, r, true)
 }
 
 // http://www.webdav.org/specs/rfc4918.html#rfc.section.9.4
 func (s *Server) doHead(w http.ResponseWriter, r *http.Request) {
+	glog.Infoln("DAV", "HEAD", r.RequestURI)
 	s.serveResource(w, r, false)
 }
 

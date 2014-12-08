@@ -23,7 +23,7 @@ func main() {
 	// Destination path is supplied as header and needs to be stripped.
 
 	mux := http.NewServeMux()
-	mux.Handle("/webdav/", &webdav.Server{
+	mux.Handle("/", &webdav.Server{
 		Fs:         webdav.Dir(*dir),
 		TrimPrefix: "/",
 		Listings:   true,
