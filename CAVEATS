@@ -1,0 +1,10 @@
+Running this server could be quite dangerous if your network is not trustworthy.
+
+The in-place restart functionality is not a panacea, and you will still need to 'lb dance',
+as they say[1]
+
+--
+[1] Don't continue to forward new external traffic to this daemon when
+attempting to restart it in-place, because new connections will come in and
+potentially happen on the old process still, preventing the old process from
+ever dying.

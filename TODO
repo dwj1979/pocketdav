@@ -2,10 +2,15 @@ Fix the following:
 
 ml36806:example rbastic$ curl -v -X PUT http://localhost:8081/webdav/images/hotel/foobar/test.txt --data-ascii "ohnoeszzt"
 
-2014/11/27 00:29:12 DAV: error with create path images/hotel/foobar/test.txt error open www/images/hotel/foobar/test.txt: no such file or directory
-(Mimic nginx's implementation?)
+2014/11/27 00:29:12 DAV: error with create path images/hotel/foobar/test.txt
+error open www/images/hotel/foobar/test.txt: no such file or directory (Mimic
+nginx's implementation?)
 
 ...
 
-Pass litmus tests
-Fix all golint
+Allow DELETEs to be configurable -- they would be logged, but maybe not actually executed sometimes.
+
+...
+
+Create a large-scale test suite
+

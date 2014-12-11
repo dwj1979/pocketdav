@@ -1,6 +1,4 @@
-PocketDAV
-
-A poor man's WebDAV server written in Go.
+PocketDAV - A tiny 'webdav' server written in Go.
 
 This was initially intended to be a small practice ground for integrating
 facebookgo/grace -- I've since added glog and cleaned up a few 'golint'
@@ -11,7 +9,6 @@ Quick start:
 
 ```
 go build
-... install all the dependencies, sorry
 ./pocketdav
 ```
 
