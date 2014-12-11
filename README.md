@@ -1,9 +1,21 @@
 PocketDAV - A tiny 'webdav' server written in Go.
 
+ * It only supports GET, HEAD, PUT, and DELETE.
+ * It supports in-place restarts. To upgrade, you can simply
+    'sudo mv pocketdav /usr/bin/pocketdav' while it's running
+    and run kill -SIGUSR2 `/sbin/pidof pocketdav` to restart it.
+
+    There are some potential CAVEATS about the current in-place restart approach.
+
+ * It has extensive logging capabilities due to rbastic/webdav using 'glog' PUT
+ * /foobar/test.txt will automatically create /foobar/ if needed. This works
+   for infinite levels of nested directories (e.g. whatever is allowed by the
+   filesystem.)
+ * No caching takes place anywhere, so a DELETE always immediately takes effect.
+
 This was initially intended to be a small practice ground for integrating
-facebookgo/grace -- I've since added glog and cleaned up a few 'golint'
-complaints in the original webdav server at https://github.com/rbastic/webdav
-and am hoping to get everything merged upstream.
+facebookgo/grace -- I've since added glog and cleaned up all of the 'golint'
+complaints.
 
 Quick start:
 
@@ -16,8 +28,9 @@ cURL examples:
 
 ```
 $ curl -v -X PUT http://localhost:8081/webdav/test.txt --data-ascii "ohnoeszzt"
-
 $ curl -v -X GET http://localhost:8081/webdav/test.txt
+$ curl -v -X HEAD http://localhost:8081/webdav/test.txt
+$ curl -v -X DELETE http://localhost:8081/webdav/test.txt
 ```
 
 --
