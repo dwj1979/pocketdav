@@ -7,7 +7,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/golang/glog"
 )
 
 // A FileSystem implements access to a collection of named files.
@@ -55,7 +54,6 @@ func (d Dir) sanitizePath(name string) (string, error) {
 		dir = "."
 	}
 
-	glog.Infoln("name=", name, "path.Clean=", (path.Clean("/" + name)), "fs=", (filepath.FromSlash(path.Clean("/" + name))), "dir=", dir)
 	return filepath.Join(dir, filepath.FromSlash(path.Clean("/"+name))), nil
 }
 
@@ -94,7 +92,7 @@ func (d Dir) Mkdir(name string) error {
 		return err
 	}
 
-	return os.Mkdir(p, os.ModePerm)
+	return os.MkdirAll(p, os.ModePerm)
 }
 
 // Remove calls os.Remove() with a sanitized path

@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"strings"
 	"time"
+	"path"
 
 	"github.com/golang/glog"
 )
@@ -79,47 +80,47 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 // convert request url to path
 func (s *Server) url2path(u *url.URL) string {
-	glog.Infoln("u.Path=", u.Path)
 	if u.Path == "" {
 		return "/"
 	}
 
 	if p := strings.TrimPrefix(u.Path, s.TrimPrefix); len(p) < len(u.Path) {
-		glog.Infoln("strings.Trim,", p, " = ", strings.Trim(p, "/"))
 		return strings.Trim(p, "/")
 	}
 
 	return "/"
 }
 
-// does path exists?
+// TODO: this is really silly
 func (s *Server) pathExists(path string) bool {
 	f, err := s.Fs.Open(path)
 	if err != nil {
 		// TODO: error logging?
 		return false
 	}
-	defer f.Close()
+	f.Close()
 
 	return true
 }
 
-// is path a directory?
+// TODO: this is also pretty silly
 func (s *Server) pathIsDirectory(path string) bool {
 	f, err := s.Fs.Open(path)
 	if err != nil {
 		// TODO: error logging?
 		return false
 	}
-	defer f.Close()
 
 	fi, err := f.Stat()
 	if err != nil {
 		// TODO: error logging?
+		f.Close()
 		return false
 	}
 
-	return fi.IsDir()
+	x := fi.IsDir()
+	f.Close()
+	return x
 }
 
 // http://www.webdav.org/specs/rfc4918.html#rfc.section.9.4
@@ -209,35 +210,34 @@ func (s *Server) deleteResource(path string, w http.ResponseWriter, r *http.Requ
 func (s *Server) doPut(w http.ResponseWriter, r *http.Request) {
 	if s.ReadOnly {
 		w.WriteHeader(StatusForbidden)
+		glog.Infoln("DAV:", "PUT Forbidden: server is ReadOnly")
 		return
 	}
+	myPath := s.url2path(r.URL)
 
-	path := s.url2path(r.URL)
-
-	if s.pathIsDirectory(path) {
+	/*
+	 * TODO: do something about this.
+	if s.pathIsDirectory(myPath) {
 		// use MKCOL instead
-		glog.Infoln("use mkcol instead perhaps, path", path, "is already a directory")
-		glog.Infoln("DAV:", "use mkcol instead perhaps, path", path)
+		glog.Infoln("DAV:", "use mkcol instead perhaps, path", myPath)
 		w.WriteHeader(StatusMethodNotAllowed)
 		return
 	}
-
-	exists := s.pathExists(path)
-
-	// TODO: content range / partial put ?, re-enable os.MkdirAll()
-
-	/*
-		err := os.MkdirAll(path, 0600)
-		if err != nil {
-			log.Printf("error %+v making directory %+v  ", err, path)
-		}
 	*/
 
-	// truncate file if exists
-	file, err := s.Fs.Create(path)
+	// TODO: only Mkdir() if path.Dir() doesn't exist
+	err := s.Fs.Mkdir(path.Dir(myPath))
+	if err != nil {
+		glog.Infoln("DAV:", "PUT error %+v making directory %+v  ", err, path.Dir(myPath))
+	}
+
+	// truncate file if it exists already ???
+	exists := s.pathExists(myPath)
+
+	file, err := s.Fs.Create(myPath)
 	if err != nil {
 		// TODO: having stupid problems?
-		glog.Infoln("DAV:", "error with create path", path, "error", err)
+		glog.Infoln("DAV:", "PUT error with create path", myPath, "error", err)
 		w.WriteHeader(StatusConflict)
 		return
 	}
@@ -247,14 +247,14 @@ func (s *Server) doPut(w http.ResponseWriter, r *http.Request) {
 	// using temporary filenames and then atomic rename's ?
 
 	if _, err := io.Copy(file, r.Body); err != nil {
-		glog.Infoln("DAV:", "error with ioCopy", file, "error", err)
+		glog.Infoln("DAV:", "PUT error with ioCopy", file, "error", err)
 		w.WriteHeader(StatusConflict)
-		file.Close()
 	} else {
 		if exists {
-			glog.Infoln("DAV:", "status no content", file, "error", err)
+			glog.Infoln("DAV:", "PUT status-no-content", file, "error", err)
 			w.WriteHeader(StatusNoContent)
 		} else {
+			glog.Infoln("DAV:", "PUT created", file, "error", err)
 			w.WriteHeader(StatusCreated)
 		}
 	}
