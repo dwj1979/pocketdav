@@ -1,7 +1,7 @@
 /*
  * pocketdav is a tiny 'webdav' server written in Go.
  *
-*/
+ */
 package main
 
 import (
@@ -31,6 +31,8 @@ func main() {
 		Fs:         webdav.Dir(*dir),
 		TrimPrefix: "/",
 		Listings:   true,
+		// ReadOnly: true,
+		// DeletesDisabled: true,
 	})
 
 	gracehttp.Serve(
