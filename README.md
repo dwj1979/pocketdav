@@ -1,21 +1,23 @@
 PocketDAV - A tiny 'webdav' server written in Go.
 
  * It only supports GET, HEAD, PUT, and DELETE.
- * It supports in-place restarts. To upgrade, you can simply
-    'sudo mv pocketdav /usr/bin/pocketdav' while it's running
-    and run kill -SIGUSR2 `/sbin/pidof pocketdav` to restart it.
+ * It supports in-place restarts. To upgrade to a new binary, you can
+   'sudo mv pocketdav /usr/bin/pocketdav' and run kill -SIGUSR2 `/sbin/pidof
+   pocketdav` to restart it.
 
     There are some potential CAVEATS about the current in-place restart approach.
 
- * It has extensive logging capabilities due to rbastic/webdav using 'glog' PUT
- * /foobar/test.txt will automatically create /foobar/ if needed. This works
+ * It has extensive logging capabilities since it uses 'glog'. This is not yet
+   being fully utilized, but a lot of logging code has been put in place already.
+ * PUT /foobar/test.txt will automatically create /foobar/ if needed. This works
    for infinite levels of nested directories (e.g. whatever is allowed by the
-   filesystem.)
+   filesystem; os.MkdirAll() is called AKA the equivalent of mkdir -p in Go).
  * No caching takes place anywhere, so a DELETE always immediately takes effect.
+ * Deleting entire folders/subfolders is not possible. This is considered to be
+   a feature.
 
 This was initially intended to be a small practice ground for integrating
-facebookgo/grace -- I've since added glog and cleaned up all of the 'golint'
-complaints.
+facebookgo/grace. It has since become a bit more, but not much.
 
 Quick start:
 
