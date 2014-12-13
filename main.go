@@ -13,8 +13,9 @@ import (
 )
 
 var (
-	port = flag.String("httpport", "8080", "port to listen on")
-	dir  = flag.String("docroot", "www", "document root folder to serve from")
+	port      = flag.String("httpport", "8080", "port to listen on")
+	dir       = flag.String("docroot", "www", "document root folder to serve from")
+	urlPrefix = flag.String("urlprefix", "/", "url prefix")
 )
 
 func main() {
@@ -27,9 +28,9 @@ func main() {
 	// Destination path is supplied as header and needs to be stripped.
 
 	mux := http.NewServeMux()
-	mux.Handle("/", &webdav.Server{
+	mux.Handle(*urlPrefix, &webdav.Server{
 		Fs:         webdav.Dir(*dir),
-		TrimPrefix: "/",
+		TrimPrefix: *urlPrefix,
 		Listings:   true,
 		// ReadOnly: true,
 		// DeletesDisabled: true,
